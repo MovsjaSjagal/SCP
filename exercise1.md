@@ -25,13 +25,13 @@ In order to compile C programs one must first make sure that the correct package
 ```
   sudo dnf install nano
 ```
-The installation should now proceed. If you have the packages installed already, once should see the following response:
+The installation should now proceed. If you have the packages installed already, once should see the following response:<font color="red">
 ```
   Package nano-8.1-3.el10.x86_64 is already installed.
   Dependencies resolved.
   Nothing to do.
   Complete!
-```
+``` </font>
 ### B Creating, editing, and running C/C++ files
 Creating a program file is done with the ```nano``` command, followed by the name you would like to give your program. For example, if we want to create a C program called "solve_strong_CP", we write the following line:
 ```
