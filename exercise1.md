@@ -4,8 +4,20 @@
 ## 1 Launching an Instance via CloudVeneto
 aklfjdakfjad
 
-## 2 Accessing your VM from your Terminal
+## 2 Accessing a Linux VM from your Terminal
 
+some instuctions 
+
+then you should see: 
+```
+bash-5.1$ 
+```
+
+then you add that linux line
+now you should see 
+```
+[almalinux@your-instance-name ~]$
+```
 
 ## 3 Launching your First C/C++ code
 In order to compile C programs one must first make sure that the correct packages are installed. The installation is achieved by running the following line of code in your VM:
