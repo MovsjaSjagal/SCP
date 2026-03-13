@@ -8,4 +8,6 @@ aklfjdakfjad
 
 
 ## 3 Launching your First C/C++ code
-fadfkjadkfjd
+In order to compile C programs one must first make sure that the correct packages are installed. The installation is achieved by running the following line of code in your VM:
+`ewa
+`
