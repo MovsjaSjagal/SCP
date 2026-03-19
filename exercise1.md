@@ -40,8 +40,96 @@ In summary, configure the instance with the following parameters:
 
 
 ## 3 Accessing a Linux VM from your Terminal
+## 3 Accessing a Linux VM from your Terminal
 
-some instuctions 
+To access your virtual machine, we use **SSH (Secure Shell)**, which allows you to securely control the remote Linux system from your local terminal.
+
+### A Connecting via the Gate Server (if outside university network)
+
+If you are not connected to the university network, you must first connect to the CloudVeneto gate server. This acts as an entry point to the internal network.
+
+Run the following command in your local terminal:
+
+```bash
+ssh username@gate.cloudveneto.it
+```
+
+Replace `username` with your CloudVeneto username. After logging in, you are now inside the CloudVeneto network.
+
+---
+
+### B Uploading Your Private Key
+
+Next, you need to make your private key available on the gate server so you can access your VM.
+
+From your **local machine**, run:
+
+```bash
+scp ~/.ssh/my_key.pem username@gate.cloudveneto.it:~
+```
+
+This copies your key to the home directory of the gate server.
+
+Now, on the gate server, organize and secure the key:
+
+```bash
+mkdir -p ~/private
+mv ~/my_key.pem ~/private/
+chmod 600 ~/private/my_key.pem
+```
+
+The permission command is important: SSH will refuse to use the key if it is publicly accessible.
+
+---
+
+### C Connecting to Your Virtual Machine
+
+You can now connect to your virtual machine using its **private IP address**, which can be found in the CloudVeneto "Instances" tab.
+
+For AlmaLinux systems:
+
+```bash
+ssh -i ~/private/my_key.pem almalinux@VM_IP
+```
+
+For Ubuntu systems:
+
+```bash
+ssh -i ~/private/my_key.pem ubuntu@VM_IP
+```
+
+Replace `VM_IP` with your instance’s private IP address.
+
+---
+
+### D First Login and Verification
+
+When connecting for the first time, you may see a message like:
+
+```bash
+The authenticity of host '...' can't be established.
+Are you sure you want to continue connecting (yes/no)?
+```
+
+Type:
+
+```bash
+yes
+```
+
+After a successful login, you should first see:
+
+```bash
+bash-5.1$
+```
+
+and then your prompt will update to something like:
+
+```bash
+[almalinux@your-instance-name ~]$
+```
+
+This confirms that you are now connected to your virtual machine. You can now execute Linux commands and proceed with compiling and running your C/C++ programs.
 
 then you should see: 
 ```
