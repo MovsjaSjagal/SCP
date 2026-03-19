@@ -1,10 +1,16 @@
 # Guide to Running C Code on a Linux Vitrual Machine using CloudVeneto
 
+This is a guide to creating, accessing, and using a Linux Virtual Machine on CloudVeneto. The guide explains, in particular, how to use the virtual environment to compile and run C/C++ programs. 
 
-## 1 Launching an Instance via CloudVeneto
+The guide assumes that the reader has access to CloudVeneto and is registered with a project. If this is not yet the case, or if the reader finds any trouble in attempting to do so, please consult the following link: https://userguide.cloudveneto.it/en/latest/Registration.html
+
+## 1 Creating a Key Pair
+
+
+## 2 Launching an Instance via CloudVeneto
 aklfjdakfjad
 
-## 2 Accessing a Linux VM from your Terminal
+## 3 Accessing a Linux VM from your Terminal
 
 some instuctions 
 
@@ -19,7 +25,7 @@ now you should see
 [almalinux@your-instance-name ~]$
 ```
 
-## 3 Launching your First C/C++ code
+## 4 Launching your First C/C++ code
 ### A Installing the required packages
 In order to compile C programs one must first make sure that the correct packages are installed. The installation is achieved by running the following line of code in your VM:
 ```
