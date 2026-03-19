@@ -39,7 +39,7 @@ In summary, configure the instance with the following parameters:
     Network: <ProjectName>-lan
 
 
-## 3 Accessing a Linux VM from your Terminal
+
 ## 3 Accessing a Linux VM from your Terminal
 
 To access your virtual machine, we use **SSH (Secure Shell)**, which allows you to securely control the remote Linux system from your local terminal.
@@ -62,7 +62,7 @@ Replace `username` with your CloudVeneto username. After logging in, you are now
 
 Next, you need to make your private key available on the gate server so you can access your VM.
 
-From your **local machine**, run:
+From your local machine run:
 
 ```bash
 scp ~/.ssh/my_key.pem username@gate.cloudveneto.it:~
@@ -131,16 +131,6 @@ and then your prompt will update to something like:
 
 This confirms that you are now connected to your virtual machine. You can now execute Linux commands and proceed with compiling and running your C/C++ programs.
 
-then you should see: 
-```
-bash-5.1$ 
-```
-
-then you add that linux line
-now you should see 
-```
-[almalinux@your-instance-name ~]$
-```
 
 ## 4 Launching your First C/C++ code
 ### A Installing the required packages
