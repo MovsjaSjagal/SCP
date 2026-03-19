@@ -23,12 +23,12 @@ Now we are ready to set up the virtual machine.
 
 Again within the "Compute" tab, find the subtab called "Instances". One should then see a list of all instances running within the project. Click on the button saying "Launch Instance", and a pop-up tab should be visible. 
 
-On this first page enter your prefered name and the amount of VMs you would like to launch (under "Count"), the standard being 1.   
-Click on "Next>", and allocated a source, ideally the most recent Almalinux version, e.g. "AlmaLinux10-INFNPadova-2026-02-17".  
-Again click on "Next>", and select a flavor with the required sizing for the compute, memory and storage capacity of the instance. A standard choice is "cloudveneto.large".   
-Then, in the next tab, add an available network channel.      
-Move to the "Security groups" tab, and set default security.   
-Then add the key pair that you created before, and launch the instance. Your instance should now be visible under the project's subtab called "Instances". 
+- On this first page enter your prefered name and the amount of VMs you would like to launch (under "Count"), the standard being 1.   
+- Click on "Next>", and allocated a source, ideally the most recent Almalinux version, e.g. "AlmaLinux10-INFNPadova-2026-02-17".  
+- Again click on "Next>", and select a flavor with the required sizing for the compute, memory and storage capacity of the instance. A standard choice is "cloudveneto.large".   
+- Then, in the next tab, add an available network channel.      
+- Move to the "Security groups" tab, and set default security.   
+- Then add the key pair that you created before, and launch the instance. Your instance should now be visible under the project's subtab called "Instances". 
 
 In summary, configure the instance with the following parameters:
 
