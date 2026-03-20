@@ -73,9 +73,9 @@ This copies your key to the home directory of the gate server.
 Now, on the gate server, organize and secure the key:
 
 ```bash
-mkdir -p ~/private
-mv ~/my_key.pem ~/private/
-chmod 600 ~/private/my_key.pem
+mkdir -p ~/.ssh
+mv ~/my_key.pem ~/.ssh/
+chmod 600 ~/.ssh/my_key.pem
 ```
 
 The permission command is important: SSH will refuse to use the key if it is publicly accessible.
@@ -89,13 +89,13 @@ You can now connect to your virtual machine using its **private IP address**, wh
 For AlmaLinux systems:
 
 ```bash
-ssh -i ~/private/my_key.pem almalinux@VM_IP
+ssh -i ~/.ssh/my_key.pem almalinux@VM_IP
 ```
 
 For Ubuntu systems:
 
 ```bash
-ssh -i ~/private/my_key.pem ubuntu@VM_IP
+ssh -i ~/.ssh/my_key.pem ubuntu@VM_IP
 ```
 
 Replace `VM_IP` with your instance’s private IP address.
