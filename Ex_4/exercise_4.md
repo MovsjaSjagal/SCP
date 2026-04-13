@@ -48,9 +48,10 @@ we understand that two frequencies are reported to have a peak: 50Hz and 120Hz.
 ### 1
 ### 2
 Nyquist frequency:
-\[
+$$
 f_N = \frac{f_s}{2} = \frac{128}{2} = 64 \,\text{Hz}
-\]
+$$
+
 ### 3
 A 120 Hz component cannot be reconstructed because it lies **above the Nyquist frequency (64 Hz)**.
 
@@ -73,7 +74,7 @@ $$
 f_{\text{alias}} = |f - n f_s|,\quad n \in \mathbb{Z}
 $$
 
-For \( f = 120 \,\text{Hz} \), \( f_s = 128 \,\text{Hz} \):
+For $ f = 120 \,\text{Hz} $, $ f_s = 128 \,\text{Hz} $:
 
 $$
 f_{\text{alias}} = |120 - 128| = 8 \,\text{Hz}
