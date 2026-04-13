@@ -161,3 +161,28 @@ The FFT of \(x_1(t)\) contains more than one frequency because the motion of a s
 
 ### 5
 Comparing the FFT peaks with the theoretical normal-mode frequencies is useful because it provides a direct check that the numerical simulation matches the expected physics. It confirms that the system decomposes correctly into its eigenmodes, and it also helps distinguish true physical features from numerical artifacts introduced by discretisation or finite time sampling. In practice it is one of the simplest ways to validate that the computed dynamics are consistent with the underlying analytical model.
+
+## Part 6: Plot inspection
+
+### 1
+The sampling spectra plot, specifically the undersampled spectrum, makes aliasing the easiest to see. In this plot the sampling rate is deliberately set lower than the Nyquist rate for the signal's highest frequency components.
+
+### 2
+in the short-record spectrum plot. 
+
+### 3
+Yes, in the coupled-oscillator FFT plot, the dominant peaks from the numerical simulation line up extremely well with the theoretical reference frequencies. 
+
+### 4
+While the alignment is close, they are rarely perfectly identical due to artifacts of the discrete Fourier transform and numerical integration. A primary reason is the discrete bin spacing of the FFT; the true theoretical frequency usually falls somewhere between two calculated frequency bins, leading to a slight mismatch. Additionally, a finite observation time causes spectral leakage, and small numerical errors accumulated by the ODE solver's tolerance limits can introduce minor phase drifts.
+
+---
+
+## Part 7: Small code modifications
+
+I chose option A: Change the sampling rate
+
+When modifying the sampling rate $f_s$, we predict that aliasing will occur if any true frequency in the signal exceeds the Nyquist frequency, defined as $f_N = f_s / 2$. If the sampling rate drops below this critical threshold, the higher frequency components will fold back into the lower frequency range. The new apparent peak positions can be predicted by calculating the difference between the true frequency and the nearest multiple of the sampling rate. Upon rerunning the simulation, the resulting FFT output matches this prediction, so we see false peaks at the folded frequencies within the bounds of the FFT's discrete bin spacing.
+
+## Part 8: 
+I must say I knew quite a lot about Fourier transforms from a mathematical point of view, as I studied it in the context of generalized functions as written by Lighthill. Mathematics, however, lives in the ideal world. I now have a much clearer understanding of how a signal is sampled and then naturally how it affects the accuracy of the following Fourier process. From a program-building point of view I have learnt a lot, as I was much less familiar. I have undertand (and for the first time downloaded) make, gnuplot, etc. The directory management especially was nice to see, as mine are generally not structured as nicely. Honestly I would, as a suggestion, even prefer some deeper explanation of Makefile. I now added it to some of my other exercises to try and improve them, but actually writing a file is still quite different. AI helps of course, but AI sometimes has difficulty doing things on the specific platform and DIR that you are working with... Then again, I understand Fourier transforms are the goal. 
