@@ -69,14 +69,14 @@ When sampling too slowly, the signal is only observed at discrete time points. A
 #### Mathematical explanation
 Aliasing occurs because sampled sinusoids are indistinguishable under shifts by multiples of the sampling frequency:
 
-\[
+$$
 f_{\text{alias}} = |f - n f_s|,\quad n \in \mathbb{Z}
-\]
+$$
 
 For \( f = 120 \,\text{Hz} \), \( f_s = 128 \,\text{Hz} \):
 
-\[
+$$
 f_{\text{alias}} = |120 - 128| = 8 \,\text{Hz}
-\]
+$$
 
 Thus, a 120 Hz signal appears as an 8 Hz signal after sampling.
