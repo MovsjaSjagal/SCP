@@ -28,8 +28,12 @@ From the lines:
 we understand that 8 files are created in a directory called output.
 
 ### 2. 
-'''src/sampling_demo.c'''
+'''
+src/sampling_demo.c
+'''
 
 ### 3. 
-'''src/coupled_oscillators_fft.c'''
+'''
+src/coupled_oscillators_fft.c
+'''
 
