@@ -74,7 +74,7 @@ $$
 f_{\text{alias}} = |f - n f_s|,\quad n \in \mathbb{Z}
 $$
 
-For $ f = 120 \,\text{Hz} $, $ f_s = 128 \,\text{Hz} $:
+For $f = 120 \,\text{Hz}$, $f_s = 128 \,\text{Hz}$:
 
 $$
 f_{\text{alias}} = |120 - 128| = 8 \,\text{Hz}
