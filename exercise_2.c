@@ -1,152 +1,190 @@
-// README
-// exercise_2.c : This file contains the 'main' function and helper functions of homework two.
+// =============================================================================
+// exercise_2.c
+// Homework 02 — Linear Vector Operation
 //
-// The goal of the script is to perform a linear vector operation for given user input values.
+// Computes the linear combination:
+//
+//     d = a * v1 + v2
+//
+// where a is a user-supplied scalar and v1, v2 are uniform vectors of
+// user-supplied dimension N (all elements of each vector are equal).
+// The result vector d is also uniform; only the first element is printed,
+// since all elements are identical by construction.
+//
+// Usage:
+//   Compile:  gcc exercise_2.c -o exercise_2
+//   Run:      ./exercise_2
+//
+// Input (interactive, via stdin):
+//   - a         : scalar (double)
+//   - v1 value  : common element value for vector v1 (double)
+//   - v2 value  : common element value for vector v2 (double)
+//   - N         : dimension of the vectors (int)
+//
+// Output:
+//   - The common element value of the result vector d = a*v1 + v2 (double)
+//
+// Notes:
+//   - Memory for v1, v2, and result is allocated dynamically with malloc().
+//     For very large N, this may exceed available RAM (see README.md).
+//   - Tested with N = 10, 10^6, 10^8. N >= 10^9 causes memory exhaustion.
+// =============================================================================
 
-// The structure of the program is as follows:
+#include <stdio.h>   // printf, scanf
+#include <stdlib.h>  // malloc, free
 
-// 1) Explain the user what to do.
-
-// 2) Obtain user input values for scalar and vectors
-
-// 3) Obtain user input values for dimensionality of vectors.
-
-// 4) Perform internal calculation.
-
-// 5) Print result
-
-
-
-
-#include <stdio.h>  // C++ <iostream> replacement for printf and scanf
-#include <stdlib.h> // C++ <vector> replacement. Provides malloc() and free() for dynamic memory
-
-// C++ <chrono> and <thread> replacements.
-// C handles sleep functions differently depending on the Operating System.
+// -----------------------------------------------------------------------------
+// OS-specific sleep support
+// -----------------------------------------------------------------------------
 #ifdef _WIN32
-#include <windows.h> // For Sleep() on Windows
+#include <windows.h> // Sleep() on Windows
 #else
-#include <unistd.h>  // For sleep() on macOS/Linux
+#include <unistd.h>  // sleep() on POSIX (macOS/Linux)
 #endif
 
-void printExplanation() {
-    // std::cout is replaced by printf.
-    printf("We will perform a linear vector operation of the type a * v1 + v2, given YOUR input! Each element of each vector will be equal, and the dimension of the vector will need to be specified by you. \n \n");
+
+// -----------------------------------------------------------------------------
+// delay_seconds()
+//
+// Portable wrapper around OS-specific sleep functions.
+//
+// Parameters:
+//   seconds (int) : number of seconds to pause execution
+// -----------------------------------------------------------------------------
+void delay_seconds(int seconds) {
+#ifdef _WIN32
+    Sleep(seconds * 1000); // Windows Sleep() takes milliseconds
+#else
+    sleep(seconds);        // POSIX sleep() takes seconds
+#endif
 }
 
-// In C, a function cannot return a full array directly like std::vector.
-// Instead, we pass an array (as a pointer) into the function to modify it.
-void getNumbers(double* numbers) {
-    printf("Please specify the value of the scalar a: ");
-    double a = 0; // C doesn't support {} initialization, we use standard = 0
-    scanf("%lf", &a); // std::cin is replaced by scanf. %lf tells it to expect a double.
 
-    printf(" \nWe can work with that. Please now add a value for the first vector: ");
+// -----------------------------------------------------------------------------
+// printExplanation()
+//
+// Prints a brief description of the program and the operation it performs
+// to stdout. Called once at program start.
+// -----------------------------------------------------------------------------
+void printExplanation() {
+    printf("-------------------------------------------------------------\n");
+    printf("  Linear Vector Operation: d = a * v1 + v2\n");
+    printf("-------------------------------------------------------------\n");
+    printf("This program computes the linear combination d = a*v1 + v2.\n");
+    printf("All elements of v1 and v2 are equal (uniform vectors).\n");
+    printf("You will be asked to provide: a, the element value of v1,\n");
+    printf("the element value of v2, and the vector dimension N.\n\n");
+}
+
+
+// -----------------------------------------------------------------------------
+// getNumbers()
+//
+// Prompts the user for the scalar a and the uniform element values of
+// vectors v1 and v2. Stores the three values in the provided array.
+//
+// Parameters:
+//   numbers (double*) : pre-allocated array of length 3.
+//                       On return: numbers[0] = a,
+//                                  numbers[1] = v1 element,
+//                                  numbers[2] = v2 element.
+// -----------------------------------------------------------------------------
+void getNumbers(double* numbers) {
+    double a = 0;
+    printf("Enter the value of the scalar a: ");
+    scanf("%lf", &a);
+
     double v1 = 0;
+    printf("Enter the element value for vector v1: ");
     scanf("%lf", &v1);
 
-    printf(" \nOptimal choice indeed. Please add your value for the second vector: ");
     double v2 = 0;
+    printf("Enter the element value for vector v2: ");
     scanf("%lf", &v2);
 
-    printf("\nOkay, that seems like a computation I could do. \n");
-
-    // Assigning the gathered inputs to the array we passed in
     numbers[0] = a;
     numbers[1] = v1;
     numbers[2] = v2;
 }
 
+
+// -----------------------------------------------------------------------------
+// getDimension()
+//
+// Prompts the user for the vector dimension N.
+//
+// Returns:
+//   (int) : the requested vector dimension N
+// -----------------------------------------------------------------------------
 int getDimension() {
-    printf("Could you please specify the dimensionality of the vectors? ");
     int dimension = 0;
-    scanf("%d", &dimension); // %d tells scanf to expect an integer
-
-    printf("Perfect, I will start computing now. \n");
-
+    printf("Enter the vector dimension N: ");
+    scanf("%d", &dimension);
     return dimension;
 }
 
-// A helper function to handle OS-specific sleep commands
-void delay_seconds(int seconds) {
-#ifdef _WIN32
-    Sleep(seconds * 1000); // Windows Sleep takes milliseconds
-#else
-    sleep(seconds);        // POSIX sleep takes seconds
-#endif
-}
 
+// -----------------------------------------------------------------------------
+// printResult()
+//
+// Prints the result of the linear combination to stdout.
+// Since all elements of d are identical by construction, only the common
+// element value is printed.
+//
+// Parameters:
+//   x (double) : the common element value of the result vector d
+// -----------------------------------------------------------------------------
 void printResult(double x) {
-    // Replacing std::this_thread::sleep_for with our custom delay wrapper
-    delay_seconds(2);
-    printf("...\n");
-    delay_seconds(2);
-    printf("...\n");
-    delay_seconds(2);
-
-    // In C, standard output is line-buffered. This means "Brrr" won't print
-    // immediately without a newline (\n) unless we manually flush the buffer.
-    printf("Brrr");
-    fflush(stdout); // Force "Brrr" to appear before the delay
-
-    delay_seconds(1);
-    printf("rr");
-    fflush(stdout);
-
-    delay_seconds(1);
-    printf("rr");
-    fflush(stdout);
-
-    delay_seconds(1);
-    printf("rr");
-    fflush(stdout);
-
-    delay_seconds(1);
-    printf("rr\n");
-
-    delay_seconds(1);
-    printf("...\n");
-    delay_seconds(2);
-
-    // Variables are printed by substituting them into format specifiers like %f
-    printf("Your result is: %f!\n", x);
+    printf("\nResult: d[i] = %f  (all elements are equal)\n", x);
 }
 
+
+// -----------------------------------------------------------------------------
+// main()
+//
+// Entry point. Orchestrates user input, memory allocation, computation,
+// and output. Frees all dynamically allocated memory before exit.
+// -----------------------------------------------------------------------------
 int main() {
-    // 1) Explain User
+    // 1) Print program description
     printExplanation();
 
-    // 2,3) Obtain user input for scalar, vectors and dimension.
-    // Declare an array of 3 doubles, then pass it to getNumbers to be filled
-    double user_input[3];
+    // 2) Collect scalar and vector element values from the user
+    double user_input[3];  // [0] = a, [1] = v1 element, [2] = v2 element
     getNumbers(user_input);
+
+    // 3) Collect vector dimension from the user
     int dim = getDimension();
 
-    // 4) Perform computation using a for-loop
-    double a = user_input[0];
-
-    // C doesn't have std::vector. We allocate dynamic memory manually using malloc.
-    // (dim * sizeof(double)) ensures we reserve enough bytes for 'dim' doubles.
-    double* v1 = (double*)malloc(dim * sizeof(double));
-    double* v2 = (double*)malloc(dim * sizeof(double));
+    // 4) Allocate memory for v1, v2, and result vectors
+    double* v1     = (double*)malloc(dim * sizeof(double));
+    double* v2     = (double*)malloc(dim * sizeof(double));
     double* result = (double*)malloc(dim * sizeof(double));
 
-    // Because C doesn't have constructor initialization like v1(dim, value),
-    // we must manually populate our arrays with a loop.
+    if (v1 == NULL || v2 == NULL || result == NULL) {
+        fprintf(stderr, "Error: memory allocation failed for dimension N = %d.\n", dim);
+        free(v1);
+        free(v2);
+        free(result);
+        return 1;
+    }
+
+    // 5) Populate v1 and v2 with their uniform element values
+    double a = user_input[0];
     for (int i = 0; i < dim; ++i) {
         v1[i] = user_input[1];
         v2[i] = user_input[2];
     }
 
+    // 6) Compute d = a * v1 + v2 element-wise
     for (int i = 0; i < dim; ++i) {
         result[i] = a * v1[i] + v2[i];
     }
 
-    // 5) Print the result
+    // 7) Print the result
     printResult(result[0]);
 
-    // C doesn't clean up dynamic memory automatically when variables go out of scope.
-    // We MUST use free() to return the memory to the system to avoid memory leaks.
+    // 8) Free dynamically allocated memory
     free(v1);
     free(v2);
     free(result);
