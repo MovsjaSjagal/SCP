@@ -81,3 +81,67 @@ f_{\text{alias}} = |120 - 128| = 8 \,\text{Hz}
 $$
 
 Thus, a 120 Hz signal appears as an 8 Hz signal after sampling.
+
+## Part 4. Frequency resolution (short_record case)
+
+### 1
+The total record length is:
+$$
+T = N \Delta t
+$$
+
+Here:
+- \( N = 64 \)
+- \( f_s = 512 \,\text{Hz} \Rightarrow \Delta t = \frac{1}{512} \)
+
+So:
+$$
+T = 64 \cdot \frac{1}{512} = \frac{64}{512} = 0.125 \,\text{s}
+$$
+
+---
+
+### 2
+FFT frequency spacing:
+$$
+\Delta f = \frac{f_s}{N} = \frac{1}{T}
+$$
+
+So:
+$$
+\Delta f = \frac{512}{64} = 8 \,\text{Hz}
+$$
+
+---
+
+### 3
+The two frequencies are 50 Hz and 55 Hz, but the FFT bins are spaced 8 Hz apart.
+
+This means:
+- Each FFT bin represents a **wide frequency interval (8 Hz)**
+- The separation between 50 Hz and 55 Hz is only **5 Hz**, which is smaller than the bin spacing
+
+As a result:
+- Both frequencies fall into the same or neighboring bins
+- The FFT cannot clearly distinguish them
+- They appear as a single broadened peak instead of two distinct peaks
+
+---
+
+### 4
+To improve separation, the first thing you should change is:
+
+**→ the total acquisition time**
+
+This is because frequency resolution is fundamentally determined by:
+$$
+\Delta f = \frac{1}{T}
+$$
+
+So increasing \( T \) (longer measurement time) directly reduces \( \Delta f \), giving finer frequency bins.
+
+Why not the others:
+- **Plotting tool:** only affects visualization, not actual spectral resolution
+- **Output file format:** has no effect on the signal or FFT computation
+
+Therefore, increasing acquisition time is the only physically meaningful way to resolve close frequencies like 50 Hz and 55 Hz.
