@@ -31,11 +31,11 @@ The following behaviour was observed:
 
 | N | Behaviour |
 |---|-----------|
-| 10 | ✅ Correct |
-| 10^6 | ✅ Correct |
-| 10^8 | ✅ Correct |
-| 10^9 | ❌ `Killed` — the OS terminates the process when it attempts to allocate ~24 GB of RAM |
-| 10^10 | ❌ `Segmentation fault (core dumped)` — `malloc()` returns `NULL` and a null pointer is dereferenced |
+| 10 |  Correct |
+| 10^6 | Correct |
+| 10^8 | Correct |
+| 10^9 | `Killed` — the OS terminates the process when it attempts to allocate ~24 GB of RAM |
+| 10^10 | `Segmentation fault (core dumped)` — `malloc()` returns `NULL` and a null pointer is dereferenced |
 
 The difference in error type between 10^9 and 10^10 is due to how the OS handles the requests. At 10^9, `malloc()` may initially succeed (due to optimistic memory allocation), but the process is killed by the OS out-of-memory manager (OOM killer) when it actually tries to use the memory. At 10^10, the requested allocation is so large that `malloc()` fails immediately and returns `NULL`, leading to a segmentation fault on the subsequent write.
 
