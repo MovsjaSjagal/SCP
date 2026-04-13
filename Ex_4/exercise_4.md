@@ -85,21 +85,9 @@ Thus, a 120 Hz signal appears as an 8 Hz signal after sampling.
 ## Part 4. Frequency resolution (short_record case)
 
 ### 1
-The total record length is:
-$$
-T = N \Delta t
-$$
 
-Here:
-- \( N = 64 \)
-- \( f_s = 512 \,\text{Hz} \Rightarrow \Delta t = \frac{1}{512} \)
 
-So:
-$$
-T = 64 \cdot \frac{1}{512} = \frac{64}{512} = 0.125 \,\text{s}
-$$
 
----
 
 ### 2
 FFT frequency spacing:
@@ -112,36 +100,64 @@ $$
 \Delta f = \frac{512}{64} = 8 \,\text{Hz}
 $$
 
----
+
 
 ### 3
-The two frequencies are 50 Hz and 55 Hz, but the FFT bins are spaced 8 Hz apart.
+The two frequencies are 50 Hz and 55 Hz, but the FFT bins are spaced 8 Hz apart. This means each FFT bin represents a fairly wide frequency interval (8 Hz), but the separation between 50 Hz and 55 Hz is only 5 Hz, which is smaller than the bin spacing.
 
-This means:
-- Each FFT bin represents a **wide frequency interval (8 Hz)**
-- The separation between 50 Hz and 55 Hz is only **5 Hz**, which is smaller than the bin spacing
+As a result both frequencies fall into the same or neighboring bin, so the FFT cannot clearly distinguish them. Hence they appear as a single broadened peak instead of two distinct peaks.
 
-As a result:
-- Both frequencies fall into the same or neighboring bins
-- The FFT cannot clearly distinguish them
-- They appear as a single broadened peak instead of two distinct peaks
-
----
 
 ### 4
-To improve separation, the first thing you should change is:
-
-**→ the total acquisition time**
-
-This is because frequency resolution is fundamentally determined by:
+To improve separation, the first thing you should change is the (acquisition) time, since frequency resolution is essentially determined by:
 $$
 \Delta f = \frac{1}{T}
 $$
 
-So increasing \( T \) (longer measurement time) directly reduces \( \Delta f \), giving finer frequency bins.
+So increasing \( T \) (longer measurement time) directly reduces \( \Delta f \), giving finer frequency bins. Modifying the output files or plotting mech obviously will not change solve this problem, since it is an actual bin spacing problem at the coding level.
 
-Why not the others:
-- **Plotting tool:** only affects visualization, not actual spectral resolution
-- **Output file format:** has no effect on the signal or FFT computation
 
-Therefore, increasing acquisition time is the only physically meaningful way to resolve close frequencies like 50 Hz and 55 Hz.
+## Part 5: Coupled oscillators
+
+### 1
+The equations of motion used in the code are
+
+$$
+m \ddot{x}_1 = -k x_1 - k_c (x_1 - x_2)
+$$
+
+$$
+m \ddot{x}_2 = -k x_2 - k_c (x_2 - x_1)
+$$
+
+where \(k\) is the spring constant of the outer walls and \(k_c\) is the coupling spring between the two masses.
+
+
+
+### 2
+This system represents two identical masses attached to fixed walls with an additional spring coupling them. It is a standard model for coupled oscillations, and it appears in many physical contexts such as simplified molecular vibrations or small lattice models where energy can be exchanged between neighboring degrees of freedom.
+
+
+
+### 3
+The in-phase normal mode corresponds to both masses moving together, meaning \(x_1 = x_2\). In this case the coupling spring is not stretched, so the motion is governed mainly by the wall springs and the frequency becomes
+
+$$
+\omega_1 = \sqrt{\frac{k}{m}}
+$$
+
+The out-of-phase mode corresponds to the masses moving in opposite directions, \(x_1 = -x_2\), which stretches the coupling spring maximally and increases the restoring force. The frequency is therefore higher and given by
+
+$$
+\omega_2 = \sqrt{\frac{k + 2k_c}{m}}
+$$
+
+
+
+### 4
+The FFT of \(x_1(t)\) contains more than one frequency because the motion of a single mass is generally not a pure normal mode. Depending on the initial conditions, both normal modes are excited at the same time, and the observed motion becomes a superposition of these oscillations. As a result, the frequency spectrum reflects multiple contributions rather than a single sharp peak.
+
+
+
+### 5
+Comparing the FFT peaks with the theoretical normal-mode frequencies is useful because it provides a direct check that the numerical simulation matches the expected physics. It confirms that the system decomposes correctly into its eigenmodes, and it also helps distinguish true physical features from numerical artifacts introduced by discretisation or finite time sampling. In practice it is one of the simplest ways to validate that the computed dynamics are consistent with the underlying analytical model.
