@@ -15,7 +15,7 @@ FFT algorithms assume samples are evenly spaced in time.
 ## Part 2. 
 ### 1.
 From the lines: 
-'''
+```
   wrote output/good_sampling_signal.csv
   wrote output/good_sampling_spectrum.csv
   wrote output/undersampled_signal.csv
@@ -24,16 +24,16 @@ From the lines:
   wrote output/short_record_spectrum.csv
   wrote output/coupled_oscillators_time.csv
   wrote output/coupled_oscillators_spectrum.csv
-'''
+```
 we understand that 8 files are created in a directory called output.
 
 ### 2. 
-'''
+```
 src/sampling_demo.c
-'''
+```
 
 ### 3. 
-'''
+```
 src/coupled_oscillators_fft.c
-'''
+```
 
