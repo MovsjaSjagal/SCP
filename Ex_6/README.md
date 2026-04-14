@@ -1,4 +1,4 @@
-# Homework 02 — Chunked DAXPY
+# Homework 06 — Chunked DAXPY
 
 Computes `d = a*x + y` (DAXPY) in two ways — a single reference loop and a
 chunk-based loop — then verifies they agree and writes the results to an HDF5
