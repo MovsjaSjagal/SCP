@@ -24,6 +24,9 @@ plot: run
 	gnuplot plots/plot_all.gp
 	@echo "Plots written to output/"
 
+plot-python: run
+	python3 plots/plot_all.py
+
 clean:
 	rm -f $(BINS)
 	rm -rf output
