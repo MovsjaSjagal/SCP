@@ -1,6 +1,5 @@
 #include "writehdf5.h"
 
-#include "hdf5.h"
 #include <hdf5.h>
 #include <stdio.h>
 
@@ -35,8 +34,15 @@ int write_results_hdf5(const char* filename,
     hid_t dset_partial = H5Dcreate(file, "/partial_sums", H5T_NATIVE_DOUBLE, space_c,
         H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
 
-    if (dset_ref < 0 || dset_chunked < 0 || dset_partial < 0)
+    if (dset_ref < 0 || dset_chunked < 0 || dset_partial < 0) {
+        if (dset_ref >= 0)     H5Dclose(dset_ref);
+        if (dset_chunked >= 0) H5Dclose(dset_chunked);
+        if (dset_partial >= 0) H5Dclose(dset_partial);
+        H5Sclose(space_n);
+        H5Sclose(space_c);
+        H5Fclose(file);
         return -2;
+    }
 
     /* === Write data === */
     H5Dwrite(dset_ref, H5T_NATIVE_DOUBLE, H5S_ALL, H5S_ALL, H5P_DEFAULT, d_ref);

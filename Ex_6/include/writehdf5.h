@@ -2,7 +2,6 @@
 #define WRITEHDF5_H
 
 #include <hdf5.h>
-#include "hdf5.h"
 
 int write_results_hdf5(
     const char* filename,
