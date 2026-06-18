@@ -75,53 +75,61 @@ bash-5.1$
 
 ---
 
-### B. Uploading Your Private Key
+### B. Enabling SSH Agent Forwarding
 
-Next, you need to make your private key available on the gate server so you 
-can access your VM. Open a new local terminal (do not close your gate session) 
-and run the appropriate command for your OS:
+Your private key must never be copied to the gate server. Instead, use **SSH agent forwarding**, which lets the gate server authenticate onward to the VM without the key ever leaving your local machine.
+
+First, add your key to your local SSH agent:
 
 **macOS/Linux:**
 ```bash
-scp ~/.ssh/my_key.pem username@gate.cloudveneto.it:~
+ssh-add ~/.ssh/my_key.pem
 ```
 
 **Windows (PowerShell):**
 ```powershell
-scp $env:USERPROFILE\.ssh\my_key.pem username@gate.cloudveneto.it:~
+ssh-add $env:USERPROFILE\.ssh\my_key.pem
 ```
 
-This copies your key to the home directory of the gate server.
-
-Now, on the gate server, organize and secure the key again:
+Then connect to the gate server with the `-A` flag to enable agent forwarding:
 
 ```bash
-mkdir -p ~/.ssh
-mv ~/my_key.pem ~/.ssh/
-chmod 600 ~/.ssh/my_key.pem
+ssh -A username@gate.cloudveneto.it
 ```
-
-The permission command is important: SSH will refuse to use the key if it is publicly accessible.
 
 ---
 
 ### C. Connecting to Your Virtual Machine
 
-You can now connect to your virtual machine using its **private IP address**, which can be found in the CloudVeneto "Instances" tab.
+**Option 1 — Two-step (from inside the gate session):**
+
+Once on the gate server, connect to the VM using its **private IP address**, found in the CloudVeneto "Instances" tab. Because agent forwarding is active, no `-i` flag is needed:
 
 For AlmaLinux systems:
-
 ```bash
-ssh -i ~/.ssh/my_key.pem almalinux@VM_IP
+ssh almalinux@VM_IP
 ```
 
 For Ubuntu systems:
-
 ```bash
-ssh -i ~/.ssh/my_key.pem ubuntu@VM_IP
+ssh ubuntu@VM_IP
 ```
 
-Replace `VM_IP` with your instance’s private IP address. If all goes well then your prompt will update to something like:
+**Option 2 — Single command with ProxyJump (recommended):**
+
+The `-J` flag lets you reach the VM in one command directly from your local terminal, without an interactive gate session:
+
+For AlmaLinux systems:
+```bash
+ssh -i ~/.ssh/my_key.pem -J username@gate.cloudveneto.it almalinux@VM_IP
+```
+
+For Ubuntu systems:
+```bash
+ssh -i ~/.ssh/my_key.pem -J username@gate.cloudveneto.it ubuntu@VM_IP
+```
+
+Replace `VM_IP` with your instance’s private IP address. If all goes well your prompt will update to something like:
 
 ```bash
 [almalinux@your-instance-name ~]$
