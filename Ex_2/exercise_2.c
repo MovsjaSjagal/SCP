@@ -8,8 +8,6 @@
 //
 // where a is a user-supplied scalar and v1, v2 are uniform vectors of
 // user-supplied dimension N (all elements of each vector are equal).
-// The result vector d is also uniform; only the first element is printed,
-// since all elements are identical by construction.
 //
 // Usage:
 //   Compile:  gcc exercise_2.c -o exercise_2
@@ -19,10 +17,7 @@
 //   - a         : scalar (double)
 //   - v1 value  : common element value for vector v1 (double)
 //   - v2 value  : common element value for vector v2 (double)
-//   - N         : dimension of the vectors (int)
-//
-// Output:
-//   - The common element value of the result vector d = a*v1 + v2 (double)
+//   - N         : dimension of the vectors (long)
 //
 // Notes:
 //   - Memory for v1, v2, and result is allocated dynamically with malloc().
@@ -33,39 +28,7 @@
 #include <stdio.h>   // printf, scanf
 #include <stdlib.h>  // malloc, free
 
-// -----------------------------------------------------------------------------
-// OS-specific sleep support
-// -----------------------------------------------------------------------------
-#ifdef _WIN32
-#include <windows.h> // Sleep() on Windows
-#else
-#include <unistd.h>  // sleep() on POSIX (macOS/Linux)
-#endif
 
-
-// -----------------------------------------------------------------------------
-// delay_seconds()
-//
-// Portable wrapper around OS-specific sleep functions.
-//
-// Parameters:
-//   seconds (int) : number of seconds to pause execution
-// -----------------------------------------------------------------------------
-void delay_seconds(int seconds) {
-#ifdef _WIN32
-    Sleep(seconds * 1000); // Windows Sleep() takes milliseconds
-#else
-    sleep(seconds);        // POSIX sleep() takes seconds
-#endif
-}
-
-
-// -----------------------------------------------------------------------------
-// printExplanation()
-//
-// Prints a brief description of the program and the operation it performs
-// to stdout. Called once at program start.
-// -----------------------------------------------------------------------------
 void printExplanation() {
     printf("-------------------------------------------------------------\n");
     printf("  Linear Vector Operation: d = a * v1 + v2\n");
@@ -77,18 +40,6 @@ void printExplanation() {
 }
 
 
-// -----------------------------------------------------------------------------
-// getNumbers()
-//
-// Prompts the user for the scalar a and the uniform element values of
-// vectors v1 and v2. Stores the three values in the provided array.
-//
-// Parameters:
-//   numbers (double*) : pre-allocated array of length 3.
-//                       On return: numbers[0] = a,
-//                                  numbers[1] = v1 element,
-//                                  numbers[2] = v2 element.
-// -----------------------------------------------------------------------------
 void getNumbers(double* numbers) {
     double a = 0;
     printf("Enter the value of the scalar a: ");
@@ -108,83 +59,61 @@ void getNumbers(double* numbers) {
 }
 
 
-// -----------------------------------------------------------------------------
-// getDimension()
-//
-// Prompts the user for the vector dimension N.
-//
-// Returns:
-//   (int) : the requested vector dimension N
-// -----------------------------------------------------------------------------
-int getDimension() {
-    int dimension = 0;
+long getDimension() {
+    long dimension = 0;
     printf("Enter the vector dimension N: ");
-    scanf("%d", &dimension);
+    scanf("%ld", &dimension);
     return dimension;
 }
 
 
-// -----------------------------------------------------------------------------
-// printResult()
-//
-// Prints the result of the linear combination to stdout.
-// Since all elements of d are identical by construction, only the common
-// element value is printed.
-//
-// Parameters:
-//   x (double) : the common element value of the result vector d
-// -----------------------------------------------------------------------------
-void printResult(double x) {
-    printf("\nResult: d[i] = %f  (all elements are equal)\n", x);
-}
-
-
-// -----------------------------------------------------------------------------
-// main()
-//
-// Entry point. Orchestrates user input, memory allocation, computation,
-// and output. Frees all dynamically allocated memory before exit.
-// -----------------------------------------------------------------------------
 int main() {
-    // 1) Print program description
     printExplanation();
 
-    // 2) Collect scalar and vector element values from the user
     double user_input[3];  // [0] = a, [1] = v1 element, [2] = v2 element
     getNumbers(user_input);
 
-    // 3) Collect vector dimension from the user
-    int dim = getDimension();
+    long dim = getDimension();
 
-    // 4) Allocate memory for v1, v2, and result vectors
     double* v1     = (double*)malloc(dim * sizeof(double));
     double* v2     = (double*)malloc(dim * sizeof(double));
     double* result = (double*)malloc(dim * sizeof(double));
 
     if (v1 == NULL || v2 == NULL || result == NULL) {
-        fprintf(stderr, "Error: memory allocation failed for dimension N = %d.\n", dim);
+        fprintf(stderr, "Error: memory allocation failed for dimension N = %ld.\n", dim);
         free(v1);
         free(v2);
         free(result);
         return 1;
     }
 
-    // 5) Populate v1 and v2 with their uniform element values
     double a = user_input[0];
-    for (int i = 0; i < dim; ++i) {
+    for (long i = 0; i < dim; ++i) {
         v1[i] = user_input[1];
         v2[i] = user_input[2];
     }
 
-    // 6) Compute d = a * v1 + v2 element-wise
-    for (int i = 0; i < dim; ++i) {
+    for (long i = 0; i < dim; ++i) {
         result[i] = a * v1[i] + v2[i];
     }
 
-    // 7) Print the result
-    printResult(result[0]);
+    // Verify all elements equal the expected value a*x + y
+    double expected = a * user_input[1] + user_input[2];
+    int pass = 1;
+    for (long i = 0; i < dim; ++i) {
+        if (result[i] != expected) { pass = 0; break; }
+    }
 
-    // 8) Free dynamically allocated memory
+    printf("\nResult (6 decimal places):  %f\n", result[0]);
+    printf("Result (full precision):    %.17f\n", result[0]);
+    printf("Verification (all elements == a*x+y): %s\n", pass ? "PASS" : "FAIL");
+
+    // Check exact equality against the mathematical value 7.4 to expose
+    // floating-point representation limits (0.1 and 7.1 are not exactly
+    // representable in IEEE 754 binary64).
+    printf("result[0] == 7.4 exactly?   %s\n",
+           (result[0] == 7.4) ? "YES" : "NO  <- floating-point representation error");
+
     free(v1);
     free(v2);
     free(result);
